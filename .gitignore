@@ -1,0 +1,7 @@
+virtualenv/
+.vscode/
+*.swp
+__pycache__/
+*.egg-info/
+build/
+dist/
