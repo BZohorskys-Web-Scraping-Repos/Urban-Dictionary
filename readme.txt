@@ -41,4 +41,5 @@ Build Project
             > python setup.py sdist bdist_wheel
         Test Tool
             Deactivate virtualenv
-            pip install <path to .tar.gz file in dist dir>
+            Install the .tar.gz file
+                > pip install <path to .tar.gz file in dist dir>
