@@ -1,12 +1,12 @@
 from lxml import etree
 import aiohttp
 import asyncio
+import curses
 import logging
 import itertools
 import requests
 import sys
 import time
-import webbrowser
 
 SITE = 'https://www.urbandictionary.com/define.php?term='
 
@@ -30,6 +30,38 @@ async def idleAnimation(task):
         print('\r', frame, sep='', end='', flush=True)
         await asyncio.sleep(0.2)
 
+def interactive_console(screen, definitionHtmlList):
+    pos = 0
+    while pos < len(definitionHtmlList):
+        screen.clear()
+        word = definitionHtmlList[pos].xpath('./div[@class="def-header"]/descendant-or-self::*/text()')
+        meaning = definitionHtmlList[pos].xpath('./div[@class="meaning"]/descendant-or-self::*/text()')
+        example = definitionHtmlList[pos].xpath('./div[@class="example"]/descendant-or-self::*/text()')
+        example = ''.join(example).replace('\r','\n         ')
+
+        word = ''.join(word).strip().title()
+        meaning = ''.join(meaning).strip()
+        screen.addstr("({0}/{1}) {2} - {3}\n".format(pos+1, len(definitionHtmlList), word, meaning))
+        screen.addstr("Example: {0}\n".format(example))
+        screen.addstr("Next, Previous, or Quit? (j,k,q)")
+        user_response = screen.getkey()
+        valid_response = False
+        while not valid_response:
+            if user_response == 'j':
+                valid_response = True
+                pos += 1
+            elif user_response == 'k':
+                if pos != 0:
+                    valid_response = True
+                    pos  -= 1
+                else:
+                    user_response = screen.getkey()
+            elif user_response == 'q':
+                valid_response = True
+                pos = len(definitionHtmlList)
+            else:
+                user_response = screen.getkey()
+
 async def main():
     if len(sys.argv) != 2:
         if len(sys.argv) < 2:
@@ -46,17 +78,7 @@ async def main():
     if webRequestTask.result()['code'] == 200:
         page_html = etree.HTML(webRequestTask.result()['html'])
         definitions = page_html.xpath('//div[@class="def-panel "]')
-        for definition in definitions:
-            header = definition.xpath('./div[@class="row"]/descendant-or-self::*/text()')
-            word = definition.xpath('./div[@class="def-header"]/descendant-or-self::*/text()')
-            meaning = definition.xpath('./div[@class="meaning"]/descendant-or-self::*/text()')
-            example = definition.xpath('./div[@class="example"]/descendant-or-self::*/text()')
-            example = ''.join(example).replace('\r','\n         ')
-            print(f"{''.join(word).strip().title()} - {''.join(meaning).strip()}")
-            print(f"Example: {example}")
-            user_response = input('Next or Quit? (ENTER/q): ')
-            if user_response == 'q':
-                break
+        curses.wrapper(interactive_console, definitions)
     else:
         print(f'Recieved {webRequestTask.result()["code"]} response code.')
 
