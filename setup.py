@@ -19,8 +19,9 @@ setup(
         'Programing Language :: Python :: 3.8',
         'Operating System :: OS Indepenent',
     ],
-    entry_points = '''
-        [console_scripts]
-        udict=udict:main
-    '''
+    entry_points = {
+        "console_scripts":[
+            "udict = src.__main__:main"
+        ]
+    },
 )

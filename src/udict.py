@@ -62,16 +62,10 @@ def interactive_console(screen, definitionHtmlList):
             else:
                 user_response = screen.getkey()
 
-async def main():
-    if len(sys.argv) != 2:
-        if len(sys.argv) < 2:
-            print('Error: Not enough arguments provided. Please provide a search term.')
-            return
-        else:
-            print('Error: Too many arguments provided.')
-            return
+def is_paragraph_empty(paragraph):
+    return True if paragraph.strip() == '' else False
 
-    query_string = sys.argv[1]
+async def search(query_string):
     search_url = ''.join([SITE, query_string])
     webRequestTask = asyncio.create_task(get_webpage(search_url))
     await idleAnimation(webRequestTask)
@@ -82,9 +76,14 @@ async def main():
     else:
         print(f'Recieved {webRequestTask.result()["code"]} response code.')
 
-def is_paragraph_empty(paragraph):
-    return True if paragraph.strip() == '' else False
-
-
 if __name__ == '__main__':
-    asyncio.run(main())
+    if len(sys.argv) != 2:
+        if len(sys.argv) < 2:
+            print('Error: Not enough arguments provided. Please provide a search term.')
+            sys.exit()
+        else:
+            print('Error: Too many arguments provided.')
+            sys.exit()
+
+    query_string = sys.argv[1]
+    sys.exit(asyncio.run(search(query_string)))
