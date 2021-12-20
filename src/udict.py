@@ -4,9 +4,7 @@ import asyncio
 import curses
 import logging
 import itertools
-import requests
 import sys
-import time
 
 SITE = 'https://www.urbandictionary.com/define.php?term='
 
@@ -61,9 +59,6 @@ def interactive_console(screen, definitionHtmlList):
                 pos = len(definitionHtmlList)
             else:
                 user_response = screen.getkey()
-
-def is_paragraph_empty(paragraph):
-    return True if paragraph.strip() == '' else False
 
 async def search(query_string):
     search_url = ''.join([SITE, query_string])
