@@ -32,9 +32,9 @@ def interactive_console(screen, definitionHtmlList):
     pos = 0
     while pos < len(definitionHtmlList):
         screen.clear()
-        word = definitionHtmlList[pos].xpath('./div[@class="def-header"]/descendant-or-self::*/text()')
-        meaning = definitionHtmlList[pos].xpath('./div[@class="meaning"]/descendant-or-self::*/text()')
-        example = definitionHtmlList[pos].xpath('./div[@class="example"]/descendant-or-self::*/text()')
+        word = definitionHtmlList[pos].xpath('.//a[contains(@class,"word")]/text()')
+        meaning = definitionHtmlList[pos].xpath('.//div[contains(@class,"meaning")]/descendant-or-self::*/text()')
+        example = definitionHtmlList[pos].xpath('.//div[contains(@class,"example")]/descendant-or-self::*/text()')
         example = ''.join(example).replace('\r','\n         ')
 
         word = ''.join(word).strip().title()
@@ -66,7 +66,7 @@ async def search(query_string):
     await idleAnimation(webRequestTask)
     if webRequestTask.result()['code'] == 200:
         page_html = etree.HTML(webRequestTask.result()['html'])
-        definitions = page_html.xpath('//div[@class="def-panel "]')
+        definitions = page_html.xpath('//div[contains(@class,"definition")]')
         curses.wrapper(interactive_console, definitions)
     else:
         print(f'Recieved {webRequestTask.result()["code"]} response code.')
