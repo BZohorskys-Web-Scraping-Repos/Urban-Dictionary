@@ -1,5 +1,6 @@
 aiohttp==3.8.1
 aiosignal==1.2.0
+altgraph==0.17.2
 async-timeout==4.0.1
 attrs==21.2.0
 bpz-lyric==0.0.1
@@ -10,6 +11,8 @@ frozenlist==1.2.0
 idna==2.10
 lxml==4.6.3
 multidict==5.2.0
+pyinstaller==4.8
+pyinstaller-hooks-contrib==2021.5
 requests==2.25.1
 typing-extensions==4.0.1
 urllib3==1.26.6

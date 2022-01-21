@@ -1,6 +1,6 @@
 import asyncio
-import sys
 import src.udict
+import sys
 
 def main():
     if len(sys.argv) != 2:

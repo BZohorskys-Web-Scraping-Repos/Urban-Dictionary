@@ -20,26 +20,10 @@ Run Project
 -----------
     Activate virtual environment
     In the root directory:
-        python udict.py <search argument>
+        python launcher.py <search argument>
 
 
-Build Project
+Distribute Project
 -------------
-    Dev Test
-    ++++++++
-        Activate virtual environment
-        Run setup.py
-            > python setup.py develop
-        An egg directory should have been created
-        Test Tool
-            > udict <search argument>
-
-    Create .tar.gz file which can be install with pip
-    +++++++++++++++++++++++++++++++++++++++++++++++++
-        Activate virtual environment
-        Run setup.py
-            > python setup.py sdist bdist_wheel
-        Test Tool
-            Deactivate virtualenv
-            Install the .tar.gz file
-                > pip install <path to .tar.gz file in dist dir>
+    pyinstaller launcher.py --name udict --onefile
+        This creates an executable file name udict in the dist directory.
