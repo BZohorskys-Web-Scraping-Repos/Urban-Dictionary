@@ -15,16 +15,16 @@ logging.basicConfig(
 
 async def get_webpage(url):
     async with aiohttp.ClientSession() as session:
-            async with session.get(url) as response:
-                code = response.status
-                html = await response.text()
-                return {'code':code,'html':html}
+        async with session.get(url) as response:
+            code = response.status
+            html = await response.text()
+            return {'code':code,'html':html}
 
 async def idleAnimation(task):
     for frame in itertools.cycle(r'-\|/-\|/'):
         if task.done():
             print('\r', '', sep='', end='', flush=True)
-            break;
+            break
         print('\r', frame, sep='', end='', flush=True)
         await asyncio.sleep(0.2)
 
@@ -70,15 +70,3 @@ async def search(query_string):
         curses.wrapper(interactive_console, definitions)
     else:
         print(f'Recieved {webRequestTask.result()["code"]} response code.')
-
-if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        if len(sys.argv) < 2:
-            print('Error: Not enough arguments provided. Please provide a search term.')
-            sys.exit()
-        else:
-            print('Error: Too many arguments provided.')
-            sys.exit()
-
-    query_string = sys.argv[1]
-    sys.exit(asyncio.run(search(query_string)))
